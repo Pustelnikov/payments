@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{/fragment/head::head}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/additional.css}">
+    <title>Error</title>
+</head>
+<body class="container-fluid">
+<div class="row">
+    <div class="col-6 align-content-center">
+        <img th:src="@{/img/logo_xl.png}" class="img-fluid" alt="logo">
+    </div>
+    <div class="col-6 align-content-center">
+        <div class="row justify-content-center mb-5">
+            <div class="col">
+                <h1 class="text-danger text-center">Payments<sup class="sup">&reg;</sup></h1>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="text-center text-danger">An error occurred</h1>
+                        <p th:text="${error}" class="mt-3"></p>
+                        <div class="d-grid mt-5">
+                            <button type="button" class="btn"
+                                    onclick="location.href='http://localhost:8080/users/main'">Go back
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <footer th:replace="~{/fragment/footer::footer}"></footer>
+    </div>
+</div>
+</body>
+</html>

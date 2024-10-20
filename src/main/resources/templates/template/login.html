@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{/fragment/head::head}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/additional.css}">
+    <title>Login</title>
+</head>
+<body class="container-fluid">
+<div class="row">
+    <div class="col-6 align-content-center">
+        <img th:src="@{/img/logo_xl.png}" class="img-fluid" alt="logo">
+    </div>
+    <div class="col-6 align-content-center">
+        <div class="row justify-content-center mb-5">
+            <div class="col">
+                <h1 class="text-danger text-center">Payments<sup class="sup">&reg;</sup></h1>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-body">
+                        <ul class="nav nav-tabs nav-justified mb-3">
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="true" th:href="@{/users/login}">Sign In</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="false" th:href="@{/users/register}">Sign Up</a>
+                            </li>
+                        </ul>
+                        <span class="mb-3 text-danger" th:if="${param.error}">Invalid username and(or) password</span>
+                        <form method="post" th:action="@{/users/login}">
+                            <!-- Username input -->
+                            <div class="form-outline mb-3">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="username" name="username" required>
+                            </div>
+                            <!-- Password input -->
+                            <div class="form-outline mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="password" name="password" required>
+                            </div>
+                            <!-- Submit button -->
+                            <div class="d-grid mt-4">
+                                <button type="submit" class="btn">Sign In</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <footer th:replace="~{/fragment/footer::footer}"></footer>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,44 @@
+.footer {
+    color: #343a40;
+    text-align: center;
+}
+
+.nav-link {
+    color: #000000 !important; 
+}
+
+.nav-link:hover {
+    color: #ffffff !important;
+    background-color: #212529 !important;
+    border-color: #212529 !important;
+}
+
+.btn {
+    border-color: #212529 !important;
+}
+
+.btn:hover {
+    color: #ffffff !important;
+    background-color: #212529 !important;
+    border-color: #212529 !important;
+}
+
+.form-control, .form-select {
+    background-color: #adb5bd !important;
+    border-color: #212529 !important;
+}
+
+.form-control:focus, .form-select:focus {
+    box-shadow: 0 0 0 0.1rem #a0a0a0 !important;
+    /* border-color: #212529 !important; */
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    appearance: textfield;
+}

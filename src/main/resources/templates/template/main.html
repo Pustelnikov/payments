@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://nz.net.ultraq.thymeleaf"
+      layout:decorate="~{/layout/layout}">
+<head>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
+    <title>Main</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <h1>Main</h1>
+    <table th:if="!${user.userAccounts.isEmpty()}" class="table mt-3">
+        <thead>
+        <tr>
+            <th>Account</th>
+            <th>Currency</th>
+            <th>Balance</th>
+            <th>Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="account : ${user.userAccounts}">
+            <td><a th:href="@{/accounts/{accountId}(accountId=${account.accountId})}"
+                   th:text="${account.accountNumber}"></a></td>
+            <td th:text="${account.accountCurrency}"></td>
+            <td th:text="${account.accountBalance}"></td>
+            <td th:text="${account.accountStatus}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <form method="post" th:action="@{/accounts/register}">
+        <table class="mt-4">
+            <tbody>
+            <tr>
+                <td>
+                    <input type="hidden" name="userId" th:value="${user.userId}"/>
+                </td>
+                <td>
+                    <select id="accountCurrency" name="accountCurrency" class="form-select" required>
+                        <option th:each="currency : ${T(dev.pustelnikov.payments.model.AccountCurrency).values()}"
+                                th:value="${currency}" th:text="${currency}"></option>
+                    </select>
+                </td>
+                <td>
+                    <button type="submit" class="btn">Add new account</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+</section>
+</body>
+</html>

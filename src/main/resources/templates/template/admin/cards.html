@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://nz.net.ultraq.thymeleaf"
+      layout:decorate="~{/layout/layout}">
+<head>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
+    <title>Cards</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <h1>Cards</h1>
+    <table th:if="!${cards.isEmpty()}" class="table mt-3">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Number</th>
+            <th>Expiration</th>
+            <th>Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="card : ${cards}">
+            <td th:text="${card.cardId}"></td>
+            <td><a th:href="@{/cards/{cardId}(cardId=${card.cardId})}"
+                   th:text="${card.cardNumber}"></a></td>
+            <td th:text="${card.cardExpirationDate}"></td>
+            <td th:text="${card.cardStatus}"></td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://nz.net.ultraq.thymeleaf"
+      layout:decorate="~{/layout/layout}">
+<head>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
+    <title>Account</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <h1>Account</h1>
+    <table class="table align-middle mt-3 mb-5">
+        <thead>
+        <tr>
+            <th>Number</th>
+            <th>Currency</th>
+            <th>Balance</th>
+            <th>Status</th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td th:text="${account.accountNumber}"></td>
+            <td th:text="${account.accountCurrency}"></td>
+            <td th:text="${account.accountBalance}"></td>
+            <td th:text="${account.accountStatus}"></td>
+            <td>
+                <form th:if="${account.getAccountStatus() == T(dev.pustelnikov.payments.model.AccountStatus).ACTIVE}"
+                      method="post" th:action="@{/accounts/lock}">
+                    <input type="hidden" name="accountId" th:value="${account.accountId}"/>
+                    <button type="submit" class="btn">Lock</button>
+                </form>
+            </td>
+            <td>
+                <form sec:authorize="hasRole('ROLE_ADMIN')" method="post" th:action="@{/accounts/unlock}">
+                    <input type="hidden" name="accountId" th:value="${account.accountId}"/>
+                    <button type="submit" class="btn">Unlock</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <h2>Cards</h2>
+    <table th:if="!${account.accountCards.isEmpty()}" class="table mt-3">
+        <thead>
+        <tr>
+            <th>Number</th>
+            <th>Expiration</th>
+            <th>Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="card : ${account.accountCards}">
+            <td th:text="${card.cardNumber}"></td>
+            <td th:text="${card.cardExpirationDate}"></td>
+            <td th:text="${card.cardStatus}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <form th:if="${account.getAccountStatus() == T(dev.pustelnikov.payments.model.AccountStatus).ACTIVE}"
+          method="post" th:action="@{/cards/register}" class="mt-4 mb-5">
+        <input type="hidden" name="accountId" th:value="${account.accountId}"/>
+        <button type="submit" class="btn">Add new card</button>
+    </form>
+    <h3>Transactions</h3>
+    <table th:if="!${account.accountTransactions.isEmpty()}" class="table mt-3 mb-5">
+        <thead>
+        <tr>
+            <th>UUID</th>
+            <th>Type</th>
+            <th>Opposite</th>
+            <th>Amount</th>
+            <th>Date</th>
+            <th>Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="transaction : ${account.accountTransactions}">
+            <td th:text="${transaction.transactionUuid}"></td>
+            <td th:text="${transaction.transactionType}"></td>
+            <td th:text="${transaction.oppositeAccountNumber}"></td>
+            <td th:text="${transaction.transactionAmount}"></td>
+            <td th:text="${transaction.transactionTimestamp}"></td>
+            <td th:text="${transaction.transactionStatus}"></td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+</body>
+</html>

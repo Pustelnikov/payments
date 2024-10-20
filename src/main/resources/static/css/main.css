@@ -1,0 +1,19 @@
+.container-fluid {
+    background-color: #6c757d ;
+}
+
+.table > tbody > tr > td,
+.table > thead > tr > th {
+  background-color: #6c757d !important;
+  border-bottom: 1px solid #212529 !important;
+}
+
+a {
+    color: rgb(0, 0, 0) !important;
+    text-decoration: none !important;
+}
+
+a:hover {
+    color: #dc3545 !important;
+    text-decoration: none !important;
+}

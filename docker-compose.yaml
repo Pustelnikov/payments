@@ -1,0 +1,12 @@
+name: payments
+
+services:
+  database:
+    container_name: payments_pgsql_db
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: payments
+      POSTGRES_USER: payment
+      POSTGRES_PASSWORD: Passw0rd

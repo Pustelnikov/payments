@@ -1,0 +1,23 @@
+.container-fluid {
+    background-color: rgb(15, 15, 15);
+}
+
+.nav-tabs {
+    border-color: rgb(0, 0, 0) !important;   
+}
+
+.nav-link.active{
+    color: rgb(0, 0, 0) !important;
+    background-color: #6c757d !important;
+    border-color: #212529 !important; 
+}
+
+.card {
+    background-color: #6c757d !important;
+    border-color: #dc3545 !important; 
+}
+
+.sup {
+    font-size: 40%;
+    top: -1.2em;
+}

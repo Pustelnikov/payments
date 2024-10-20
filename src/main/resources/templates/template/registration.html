@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{/fragment/head::head}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/additional.css}">
+    <title>Registration</title>
+</head>
+<body class="container-fluid">
+<div class="row">
+    <div class="col-6 align-content-center">
+        <img th:src="@{/img/logo_xl.png}" class="img-fluid" alt="logo">
+    </div>
+    <div class="col-6 align-content-center">
+        <div class="row justify-content-center mb-5">
+            <div class="col">
+                <h1 class="text-danger text-center">Payments<sup class="sup">&reg;</sup></h1>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-body">
+                        <ul class="nav nav-tabs nav-justified mb-3">
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="false" th:href="@{/users/login}">Sign In</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="true" th:href="@{/users/register}">Sign Up</a>
+                            </li>
+                        </ul>
+                        <form method="post" th:action="@{/users/register}" th:object="${userRegistrationRequestDto}">
+                            <!-- Username input -->
+                            <div class="form-outline mb-3">
+                                <label for="userName" class="form-label">Username</label>
+                                <input type="text" name="userName" id="userName" class="form-control"
+                                       th:field="*{userName}" required>
+                                <span class="text-danger" th:if="${#fields.hasErrors('userName')}"
+                                      th:errors="*{userName}"></span>
+                            </div>
+                            <!-- Password input -->
+                            <div class="form-outline mb-3">
+                                <label for="userPassword" class="form-label">Password</label>
+                                <input type="password" name="userPassword" id="userPassword" class="form-control"
+                                       th:field="*{userPassword}" required>
+                                <span class="text-danger" th:if="${#fields.hasErrors('userPassword')}"
+                                      th:errors="*{userPassword}"></span>
+                            </div>
+                            <!-- User type input -->
+                            <div class="form-outline mb-3">
+                                <label for="userType" class="form-label">Type</label>
+                                <select name="userType" id="userType" class="form-select" th:field="*{userType}"
+                                        required>
+                                    <option value="" selected>Please choose...</option>
+                                    <option th:each="type : ${T(dev.pustelnikov.payments.model.UserType).values()}"
+                                            th:value="${type}" th:text="${type}"></option>
+                                </select>
+                                <span class="text-danger" th:if="${#fields.hasErrors('userType')}"
+                                      th:errors="*{userType}"></span>
+                            </div>
+                            <!-- Submit button -->
+                            <div class="d-grid mt-4">
+                                <button type="submit" class="btn">Sign Up</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <footer th:replace="~{/fragment/footer::footer}"></footer>
+    </div>
+</div>
+</body>
+</html>
