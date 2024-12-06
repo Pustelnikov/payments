@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://nz.net.ultraq.thymeleaf">
+<head th:replace="~{/fragment/head::head(~{::title})}"></head>
+<body class="container-fluid min-vh-100 d-flex flex-column">
+<div sec:authorize="isAuthenticated()" class="row">
+    <div class="col">
+        <header>
+            <nav th:replace="~{/fragment/navigation-top::navigation-top}"></nav>
+        </header>
+    </div>
+</div>
+<div class="row flex-grow-1">
+    <div sec:authorize="isAuthenticated()" class="col-2">
+        <aside>
+            <nav sec:authorize="hasRole('ROLE_ADMIN')"
+                 th:replace="~{/fragment/admin/navigation-left::navigation-left}"></nav>
+            <nav sec:authorize="hasRole('ROLE_CUSTOMER')"
+                 th:replace="~{/fragment/customer/navigation-left::navigation-left}"></nav>
+        </aside>
+    </div>
+    <div class="col">
+        <main>
+            <section layout:fragment="content"></section>
+        </main>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <footer th:replace="~{/fragment/footer::footer}"></footer>
+    </div>
+</div>
+</body>
+</html>

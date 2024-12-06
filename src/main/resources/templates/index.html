@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://nz.net.ultraq.thymeleaf"
+      layout:decorate="~{/layout/layout}">
+<head>
+    <title>Welcome</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="row min-vh-100">
+        <div class="col-6 align-content-center">
+            <img th:src="@{/img/logo_950x950.png}" class="float-end" width="320" height="320" alt="logo">
+        </div>
+        <div class="col-6 align-content-center">
+            <div class="row justify-content-center">
+                <div class="col">
+                    <h1 class="text-center">Payments<sup class="sup">&reg;</sup></h1>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-6">
+                    <div class="card mt-5">
+                        <div class="card-body">
+                            <div class="d-grid">
+                                <a class="btn btn-primary" th:href="@{/users/login}">Sign In</a>
+                            </div>
+                            <div class="text-center">or</div>
+                            <div class="d-grid">
+                                <a class="btn btn-primary" th:href="@{/users/register}">Sign Up</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>
+
+
