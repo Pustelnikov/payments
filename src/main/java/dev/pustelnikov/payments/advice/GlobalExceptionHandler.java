@@ -1,6 +1,7 @@
 package dev.pustelnikov.payments.advice;
 
 import dev.pustelnikov.payments.exception.UserAlreadyExistsException;
+import dev.pustelnikov.payments.exception.UserNotFoundException;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
@@ -13,6 +14,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserAlreadyExistsException.class)
     public String handleUserAlreadyExistsException(UserAlreadyExistsException exception, HttpServletResponse response, Model model) {
         response.setStatus(HttpStatus.CONFLICT.value());
+        model.addAttribute("error", exception.getMessage());
+        return "template/error";
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public String handleUserNotFoundException(UserNotFoundException exception, HttpServletResponse response, Model model) {
+        response.setStatus(HttpStatus.NOT_FOUND.value());
         model.addAttribute("error", exception.getMessage());
         return "template/error";
     }

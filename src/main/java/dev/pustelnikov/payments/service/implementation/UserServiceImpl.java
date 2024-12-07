@@ -8,6 +8,7 @@ import dev.pustelnikov.payments.repository.UserRepo;
 import dev.pustelnikov.payments.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.Set;
 
@@ -16,6 +17,7 @@ import java.util.Set;
 public class UserServiceImpl implements UserService {
 
     private final UserRepo userRepo;
+    private final PasswordEncoder bCryptPasswordEncoder;
 
     @Override
     @Transactional
@@ -26,7 +28,7 @@ public class UserServiceImpl implements UserService {
         }
         UserEntity userEntity = UserEntity.builder()
                 .userName(unregisteredUserName)
-                .userPassword(userRegistrationRequestDto.getUserPassword())
+                .userPassword(bCryptPasswordEncoder.encode(userRegistrationRequestDto.getUserPassword()))
                 .userRoles(Set.of(UserRole.ROLE_CUSTOMER))
                 .build();
         userRepo.save(userEntity);

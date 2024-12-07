@@ -23,4 +23,9 @@ public class UserController {
         userService.registerUser(userRegistrationRequestDto);
         return "redirect:/";
     }
+
+    @GetMapping("login")
+    public String getUserLoginForm() {
+        return "template/login";
+    }
 }

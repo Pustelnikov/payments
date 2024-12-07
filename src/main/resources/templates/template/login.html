@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://nz.net.ultraq.thymeleaf"
+      layout:decorate="~{/layout/layout}">
+<head>
+    <title>Login</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="row min-vh-100">
+        <div class="col-6 align-content-center"></div>
+        <div class="col-6 align-content-center">
+            <div class="row justify-content-center">
+                <div class="col">
+                    <h1 class="text-center">Payments<sup class="sup">&reg;</sup></h1>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-6">
+                    <div class="card mt-5">
+                        <div class="card-body">
+                            <ul class="nav nav-tabs nav-justified mb-3">
+                                <li class="nav-item">
+                                    <a class="nav-link active" aria-current="true" th:href="@{/users/login}">Sign In</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" aria-current="false" th:href="@{/users/register}">Sign Up</a>
+                                </li>
+                            </ul>
+                            <span class="mb-3 text-danger" th:if="${param.error}">Invalid username and/or password</span>
+                            <form method="post" th:action="@{/users/login}">
+                                <div class="form-outline mb-3">
+                                    <label for="username" class="form-label">Username</label>
+                                    <input type="text" class="form-control" id="username" name="username" required>
+                                </div>
+                                <div class="form-outline mb-3">
+                                    <label for="password" class="form-label">Password</label>
+                                    <input type="password" class="form-control" id="password" name="password" required>
+                                </div>
+                                <div class="d-grid mt-4">
+                                    <button type="submit" class="btn btn-primary">Sign In</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>
