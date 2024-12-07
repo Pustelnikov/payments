@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://nz.net.ultraq.thymeleaf"
+      layout:decorate="~{/layout/layout}">
+<head>
+    <title>Error</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="row">
+        <div class="col-6">
+            <div class="card mt-5">
+                <div class="card-body">
+                    <h3 class="text-center text-danger">An error occurred</h3>
+                    <p th:text="${error}" class="mt-3"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

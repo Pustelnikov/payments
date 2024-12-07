@@ -1,5 +1,6 @@
 package dev.pustelnikov.payments.dto;
 
+import dev.pustelnikov.payments.dto.user.UserDto;
 import dev.pustelnikov.payments.model.AccountCurrency;
 import dev.pustelnikov.payments.model.AccountStatus;
 import lombok.AllArgsConstructor;

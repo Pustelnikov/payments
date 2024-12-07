@@ -1,5 +1,6 @@
-package dev.pustelnikov.payments.dto;
+package dev.pustelnikov.payments.dto.user;
 
+import dev.pustelnikov.payments.dto.AccountDto;
 import dev.pustelnikov.payments.model.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Data;
