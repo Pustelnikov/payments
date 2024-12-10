@@ -2,6 +2,7 @@ package dev.pustelnikov.payments.service.implementation;
 
 import dev.pustelnikov.payments.dto.account.AccountDto;
 import dev.pustelnikov.payments.dto.account.AccountRegistrationRequestDto;
+import dev.pustelnikov.payments.exception.account.AccountNotFoundException;
 import dev.pustelnikov.payments.mapper.AccountMapper;
 import dev.pustelnikov.payments.model.AccountStatus;
 import dev.pustelnikov.payments.model.entity.AccountEntity;
@@ -54,6 +55,23 @@ public class AccountServiceImpl implements AccountService {
                 .accountStatus(AccountStatus.ACTIVE)
                 .user(userEntity)
                 .build();
+        accountRepo.save(accountEntity);
+    }
+
+    @Override
+    public AccountEntity findAccountById(Long accountId) throws AccountNotFoundException {
+        return accountRepo.findById(accountId)
+                .orElseThrow(() -> new AccountNotFoundException("Account with id %d not found".formatted(accountId)));
+    }
+
+    @Override
+    public boolean isAccountActive(AccountEntity accountEntity) {
+        return accountEntity.getAccountStatus() == AccountStatus.ACTIVE;
+    }
+
+    @Override
+    @Transactional
+    public void saveAccountEntity(AccountEntity accountEntity) {
         accountRepo.save(accountEntity);
     }
 }

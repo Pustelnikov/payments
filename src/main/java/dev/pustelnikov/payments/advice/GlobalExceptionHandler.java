@@ -1,7 +1,9 @@
 package dev.pustelnikov.payments.advice;
 
-import dev.pustelnikov.payments.exception.UserAlreadyExistsException;
-import dev.pustelnikov.payments.exception.UserNotFoundException;
+import dev.pustelnikov.payments.exception.account.AccountLockedException;
+import dev.pustelnikov.payments.exception.account.AccountNotFoundException;
+import dev.pustelnikov.payments.exception.user.UserAlreadyExistsException;
+import dev.pustelnikov.payments.exception.user.UserNotFoundException;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
@@ -21,6 +23,20 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserNotFoundException.class)
     public String handleUserNotFoundException(UserNotFoundException exception, HttpServletResponse response, Model model) {
         response.setStatus(HttpStatus.NOT_FOUND.value());
+        model.addAttribute("error", exception.getMessage());
+        return "template/error";
+    }
+
+    @ExceptionHandler(AccountNotFoundException.class)
+    public String handleAccountNotFoundException(AccountNotFoundException exception, HttpServletResponse response, Model model) {
+        response.setStatus(HttpStatus.NOT_FOUND.value());
+        model.addAttribute("error", exception.getMessage());
+        return "template/error";
+    }
+
+    @ExceptionHandler(AccountLockedException.class)
+    public String handleAccountLockedException(AccountLockedException exception, HttpServletResponse response, Model model) {
+        response.setStatus(HttpStatus.LOCKED.value());
         model.addAttribute("error", exception.getMessage());
         return "template/error";
     }

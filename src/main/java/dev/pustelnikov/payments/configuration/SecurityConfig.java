@@ -1,6 +1,6 @@
 package dev.pustelnikov.payments.configuration;
 
-import dev.pustelnikov.payments.exception.UserNotFoundException;
+import dev.pustelnikov.payments.exception.user.UserNotFoundException;
 import dev.pustelnikov.payments.model.entity.UserEntity;
 import dev.pustelnikov.payments.repository.UserRepo;
 import lombok.RequiredArgsConstructor;

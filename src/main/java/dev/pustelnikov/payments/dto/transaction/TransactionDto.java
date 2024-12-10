@@ -1,4 +1,4 @@
-package dev.pustelnikov.payments.dto;
+package dev.pustelnikov.payments.dto.transaction;
 
 import dev.pustelnikov.payments.dto.account.AccountDto;
 import dev.pustelnikov.payments.model.TransactionStatus;

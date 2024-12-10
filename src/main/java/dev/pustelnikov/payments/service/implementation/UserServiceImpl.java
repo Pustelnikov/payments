@@ -1,8 +1,8 @@
 package dev.pustelnikov.payments.service.implementation;
 
 import dev.pustelnikov.payments.dto.user.UserRegistrationRequestDto;
-import dev.pustelnikov.payments.exception.UserAlreadyExistsException;
-import dev.pustelnikov.payments.exception.UserNotFoundException;
+import dev.pustelnikov.payments.exception.user.UserAlreadyExistsException;
+import dev.pustelnikov.payments.exception.user.UserNotFoundException;
 import dev.pustelnikov.payments.model.UserRole;
 import dev.pustelnikov.payments.model.entity.UserEntity;
 import dev.pustelnikov.payments.repository.UserRepo;

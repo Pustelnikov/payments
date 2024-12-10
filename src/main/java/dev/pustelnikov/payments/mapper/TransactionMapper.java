@@ -1,6 +1,6 @@
 package dev.pustelnikov.payments.mapper;
 
-import dev.pustelnikov.payments.dto.TransactionDto;
+import dev.pustelnikov.payments.dto.transaction.TransactionDto;
 import dev.pustelnikov.payments.mapper.utility.CycleAvoidingMappingContext;
 import dev.pustelnikov.payments.model.entity.TransactionEntity;
 import org.mapstruct.*;
