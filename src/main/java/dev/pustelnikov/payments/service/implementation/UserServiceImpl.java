@@ -2,6 +2,7 @@ package dev.pustelnikov.payments.service.implementation;
 
 import dev.pustelnikov.payments.dto.user.UserRegistrationRequestDto;
 import dev.pustelnikov.payments.exception.UserAlreadyExistsException;
+import dev.pustelnikov.payments.exception.UserNotFoundException;
 import dev.pustelnikov.payments.model.UserRole;
 import dev.pustelnikov.payments.model.entity.UserEntity;
 import dev.pustelnikov.payments.repository.UserRepo;
@@ -32,5 +33,11 @@ public class UserServiceImpl implements UserService {
                 .userRoles(Set.of(UserRole.ROLE_CUSTOMER))
                 .build();
         userRepo.save(userEntity);
+    }
+
+    @Override
+    public UserEntity findUserByUserName(String userName) throws UserNotFoundException {
+        return userRepo.findByUserName(userName)
+                .orElseThrow(() -> new UserNotFoundException("User with username %s not found".formatted(userName)));
     }
 }

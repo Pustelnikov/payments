@@ -1,5 +1,6 @@
 package dev.pustelnikov.payments.dto;
 
+import dev.pustelnikov.payments.dto.account.AccountDto;
 import dev.pustelnikov.payments.model.TransactionStatus;
 import dev.pustelnikov.payments.model.TransactionType;
 import lombok.AllArgsConstructor;

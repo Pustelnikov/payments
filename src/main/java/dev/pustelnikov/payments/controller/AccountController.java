@@ -1,11 +1,13 @@
 package dev.pustelnikov.payments.controller;
 
+import dev.pustelnikov.payments.dto.account.AccountRegistrationRequestDto;
 import dev.pustelnikov.payments.service.AccountService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -21,5 +23,11 @@ public class AccountController {
         model.addAttribute("userName", userName);
         model.addAttribute("userAccounts", accountService.getUserAccounts(userName));
         return "template/main";
+    }
+
+    @PostMapping("register")
+    public String registerAccount(AccountRegistrationRequestDto accountRegistrationRequestDto) {
+        accountService.registerAccount(accountRegistrationRequestDto);
+        return "redirect:/accounts/main";
     }
 }
