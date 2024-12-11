@@ -1,6 +1,7 @@
 package dev.pustelnikov.payments.service.implementation;
 
 import dev.pustelnikov.payments.dto.transaction.*;
+import dev.pustelnikov.payments.exception.account.AccountInsufficientFundsException;
 import dev.pustelnikov.payments.exception.account.AccountLockedException;
 import dev.pustelnikov.payments.model.TransactionStatus;
 import dev.pustelnikov.payments.model.TransactionType;
@@ -43,6 +44,35 @@ public class TransactionServiceImpl implements TransactionService {
         TransactionEntity transactionEntity = TransactionEntity.builder()
                 .transactionUuid(this.generateTransactionUuid())
                 .transactionType(TransactionType.DEPOSIT)
+                .oppositeAccountNumber("External")
+                .transactionAmount(transactionAmount)
+                .transactionTimestamp(LocalDateTime.now())
+                .transactionStatus(TransactionStatus.SUCCESSFUL)
+                .account(accountEntity)
+                .build();
+        transactionRepo.save(transactionEntity);
+    }
+
+    @Override
+    @Transactional
+    public void doWithdrawTransaction(WithdrawTransactionRequestDto withdrawTransactionRequestDto)
+            throws AccountLockedException, AccountInsufficientFundsException {
+        Long accountEntityId = withdrawTransactionRequestDto.getAccountId();
+        BigDecimal transactionAmount = withdrawTransactionRequestDto.getTransactionAmount();
+        AccountEntity accountEntity = accountService.findAccountById(accountEntityId);
+
+        if (!accountService.isAccountActive(accountEntity)) {
+            throw new AccountLockedException("Account %s is not active".formatted(accountEntity.getAccountNumber()));
+        }
+        if (!accountService.isAccountBalanceValid(accountEntity, transactionAmount)) {
+            throw new AccountInsufficientFundsException("Account number %s has insufficient funds".formatted(accountEntity.getAccountNumber()));
+        }
+
+        accountEntity.setAccountBalance(accountEntity.getAccountBalance().subtract(transactionAmount));
+        accountService.saveAccountEntity(accountEntity);
+        TransactionEntity transactionEntity = TransactionEntity.builder()
+                .transactionUuid(this.generateTransactionUuid())
+                .transactionType(TransactionType.WITHDRAW)
                 .oppositeAccountNumber("External")
                 .transactionAmount(transactionAmount)
                 .transactionTimestamp(LocalDateTime.now())

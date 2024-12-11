@@ -1,6 +1,7 @@
 package dev.pustelnikov.payments.controller;
 
 import dev.pustelnikov.payments.dto.transaction.DepositTransactionRequestDto;
+import dev.pustelnikov.payments.dto.transaction.WithdrawTransactionRequestDto;
 import dev.pustelnikov.payments.service.AccountService;
 import dev.pustelnikov.payments.service.TransactionService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,6 +29,18 @@ public class TransactionController {
     @PostMapping("deposit")
     public String doDeposit(DepositTransactionRequestDto depositTransactionRequestDto) {
         transactionService.doDepositTransaction(depositTransactionRequestDto);
+        return "redirect:/accounts/main";
+    }
+
+    @GetMapping("withdraw")
+    public String getWithdrawForm(HttpServletRequest httpServletRequest, Model model) {
+        model.addAttribute("userAccounts", accountService.getUserAccounts(httpServletRequest.getUserPrincipal().getName()));
+        return "template/withdraw";
+    }
+
+    @PostMapping("withdraw")
+    public String doWithdraw(WithdrawTransactionRequestDto withdrawTransactionRequestDto) {
+        transactionService.doWithdrawTransaction(withdrawTransactionRequestDto);
         return "redirect:/accounts/main";
     }
 }

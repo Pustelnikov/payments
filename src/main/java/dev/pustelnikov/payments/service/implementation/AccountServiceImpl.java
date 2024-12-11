@@ -74,4 +74,10 @@ public class AccountServiceImpl implements AccountService {
     public void saveAccountEntity(AccountEntity accountEntity) {
         accountRepo.save(accountEntity);
     }
+
+    @Override
+    public boolean isAccountBalanceValid(AccountEntity accountEntity, BigDecimal transactionAmount) {
+        BigDecimal accountEntityBalance = accountEntity.getAccountBalance();
+        return accountEntityBalance.compareTo(transactionAmount) >= 0;
+    }
 }

@@ -1,5 +1,6 @@
 package dev.pustelnikov.payments.advice;
 
+import dev.pustelnikov.payments.exception.account.AccountInsufficientFundsException;
 import dev.pustelnikov.payments.exception.account.AccountLockedException;
 import dev.pustelnikov.payments.exception.account.AccountNotFoundException;
 import dev.pustelnikov.payments.exception.user.UserAlreadyExistsException;
@@ -37,6 +38,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AccountLockedException.class)
     public String handleAccountLockedException(AccountLockedException exception, HttpServletResponse response, Model model) {
         response.setStatus(HttpStatus.LOCKED.value());
+        model.addAttribute("error", exception.getMessage());
+        return "template/error";
+    }
+
+    @ExceptionHandler(AccountInsufficientFundsException.class)
+    public String handleAccountInsufficientFundsException(AccountInsufficientFundsException exception, HttpServletResponse response, Model model) {
+        response.setStatus(HttpStatus.FORBIDDEN.value());
         model.addAttribute("error", exception.getMessage());
         return "template/error";
     }
