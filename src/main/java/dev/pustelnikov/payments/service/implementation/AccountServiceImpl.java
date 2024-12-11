@@ -4,6 +4,7 @@ import dev.pustelnikov.payments.dto.account.AccountDto;
 import dev.pustelnikov.payments.dto.account.AccountRegistrationRequestDto;
 import dev.pustelnikov.payments.exception.account.AccountNotFoundException;
 import dev.pustelnikov.payments.mapper.AccountMapper;
+import dev.pustelnikov.payments.model.AccountCurrency;
 import dev.pustelnikov.payments.model.AccountStatus;
 import dev.pustelnikov.payments.model.entity.AccountEntity;
 import dev.pustelnikov.payments.model.entity.UserEntity;
@@ -79,5 +80,16 @@ public class AccountServiceImpl implements AccountService {
     public boolean isAccountBalanceValid(AccountEntity accountEntity, BigDecimal transactionAmount) {
         BigDecimal accountEntityBalance = accountEntity.getAccountBalance();
         return accountEntityBalance.compareTo(transactionAmount) >= 0;
+    }
+
+    @Override
+    public AccountEntity findAccountByNumber(String accountNumber) throws AccountNotFoundException {
+        return accountRepo.findByAccountNumber(accountNumber)
+                .orElseThrow(() -> new AccountNotFoundException("Account with number %s not found".formatted(accountNumber)));
+    }
+
+    @Override
+    public boolean isAccountCurrencyValid(AccountEntity accountEntity, AccountCurrency oppositeAccountCurrency) {
+        return accountEntity.getAccountCurrency() == oppositeAccountCurrency;
     }
 }

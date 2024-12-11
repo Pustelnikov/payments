@@ -1,6 +1,7 @@
 package dev.pustelnikov.payments.service.implementation;
 
 import dev.pustelnikov.payments.dto.transaction.*;
+import dev.pustelnikov.payments.exception.account.AccountCurrencyMismatchException;
 import dev.pustelnikov.payments.exception.account.AccountInsufficientFundsException;
 import dev.pustelnikov.payments.exception.account.AccountLockedException;
 import dev.pustelnikov.payments.model.TransactionStatus;
@@ -80,5 +81,56 @@ public class TransactionServiceImpl implements TransactionService {
                 .account(accountEntity)
                 .build();
         transactionRepo.save(transactionEntity);
+    }
+
+    @Override
+    @Transactional
+    public void doTransferTransaction(TransferTransactionRequestDto transferTransactionRequestDto)
+            throws AccountLockedException, AccountInsufficientFundsException, AccountCurrencyMismatchException {
+        Long accountEntityId = transferTransactionRequestDto.getAccountId();
+        String oppositeAccountNumber = transferTransactionRequestDto.getOppositeAccountNumber();
+        BigDecimal transactionAmount = transferTransactionRequestDto.getTransactionAmount();
+        AccountEntity accountEntity = accountService.findAccountById(accountEntityId);
+        AccountEntity oppositeAccountEntity = accountService.findAccountByNumber(oppositeAccountNumber);
+
+        if (!accountService.isAccountActive(accountEntity)) {
+            throw new AccountLockedException("Account number %s is not active".formatted(accountEntity.getAccountNumber()));
+        }
+        if (!accountService.isAccountActive(oppositeAccountEntity)) {
+            throw new AccountLockedException("Account number %s is not active".formatted(oppositeAccountEntity.getAccountNumber()));
+        }
+        if (!accountService.isAccountBalanceValid(accountEntity, transactionAmount)) {
+            throw new AccountInsufficientFundsException("Account number %s has insufficient funds".formatted(accountEntity.getAccountNumber()));
+        }
+        if (!accountService.isAccountCurrencyValid(accountEntity, oppositeAccountEntity.getAccountCurrency())) {
+            throw new AccountCurrencyMismatchException("Accounts %s and %s has different currency type"
+                    .formatted(accountEntity.getAccountNumber(), oppositeAccountEntity.getAccountNumber()));
+        }
+
+        accountEntity.setAccountBalance(accountEntity.getAccountBalance().subtract(transactionAmount));
+        accountService.saveAccountEntity(accountEntity);
+        TransactionEntity transactionEntity = TransactionEntity.builder()
+                .transactionUuid(this.generateTransactionUuid())
+                .transactionType(TransactionType.TRANSFER)
+                .oppositeAccountNumber(oppositeAccountNumber)
+                .transactionAmount(transactionAmount)
+                .transactionTimestamp(LocalDateTime.now())
+                .transactionStatus(TransactionStatus.SUCCESSFUL)
+                .account(accountEntity)
+                .build();
+        transactionRepo.save(transactionEntity);
+
+        oppositeAccountEntity.setAccountBalance(oppositeAccountEntity.getAccountBalance().add(transactionAmount));
+        accountService.saveAccountEntity(oppositeAccountEntity);
+        TransactionEntity oppositeTransactionEntity = TransactionEntity.builder()
+                .transactionUuid(this.generateTransactionUuid())
+                .transactionType(TransactionType.TRANSFER)
+                .oppositeAccountNumber(accountEntity.getAccountNumber())
+                .transactionAmount(transactionAmount)
+                .transactionTimestamp(LocalDateTime.now())
+                .transactionStatus(TransactionStatus.SUCCESSFUL)
+                .account(oppositeAccountEntity)
+                .build();
+        transactionRepo.save(oppositeTransactionEntity);
     }
 }

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://nz.net.ultraq.thymeleaf"
+      layout:decorate="~{/layout/layout}">
+<head>
+    <title>Transfer</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="row">
+        <div class="col-md-3 mt-3 ms-3">
+            <h1 class="mb-3 text-center">Transfer</h1>
+            <form method="post" th:action="@{/transactions/transfer}">
+                <div class="mb-3">
+                    <label for="accountId" class="form-label">Account</label>
+                    <select id="accountId" name="accountId" class="form-select" required>
+                        <option value="" selected>Please choose...</option>
+                        <option th:each="account : ${userAccounts}" th:value="${account.accountId}"
+                                th:text="${account.accountNumber}"></option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="oppositeAccountNumber" class="form-label">Recipient</label>
+                    <input type="text" class="form-control"
+                           id="oppositeAccountNumber" name="oppositeAccountNumber" required>
+                </div>
+                <div class="mb-3">
+                    <label for="transactionAmount" class="form-label">Amount</label>
+                    <input type="number" min="0" step="0.01" class="form-control"
+                           id="transactionAmount" name="transactionAmount" required>
+                </div>
+                <div class="d-grid mt-4">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+</body>
+</html>
