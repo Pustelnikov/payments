@@ -133,4 +133,55 @@ public class TransactionServiceImpl implements TransactionService {
                 .build();
         transactionRepo.save(oppositeTransactionEntity);
     }
+
+    @Override
+    @Transactional
+    public void doPaymentTransaction(PaymentTransactionRequestDto paymentTransactionRequestDto)
+            throws AccountLockedException, AccountInsufficientFundsException, AccountCurrencyMismatchException {
+        Long accountEntityId = paymentTransactionRequestDto.getAccountId();
+        String oppositeAccountNumber = paymentTransactionRequestDto.getOppositeAccountNumber();
+        BigDecimal transactionAmount = paymentTransactionRequestDto.getTransactionAmount();
+        AccountEntity accountEntity = accountService.findAccountById(accountEntityId);
+        AccountEntity oppositeAccountEntity = accountService.findAccountByNumber(oppositeAccountNumber);
+
+        if (!accountService.isAccountActive(accountEntity)) {
+            throw new AccountLockedException("Account number %s is not active".formatted(accountEntity.getAccountNumber()));
+        }
+        if (!accountService.isAccountActive(oppositeAccountEntity)) {
+            throw new AccountLockedException("Account number %s is not active".formatted(oppositeAccountEntity.getAccountNumber()));
+        }
+        if (!accountService.isAccountBalanceValid(accountEntity, transactionAmount)) {
+            throw new AccountInsufficientFundsException("Account number %s has insufficient funds".formatted(accountEntity.getAccountNumber()));
+        }
+        if (!accountService.isAccountCurrencyValid(accountEntity, oppositeAccountEntity.getAccountCurrency())) {
+            throw new AccountCurrencyMismatchException("Accounts %s and %s has different currency type"
+                    .formatted(accountEntity.getAccountNumber(), oppositeAccountEntity.getAccountNumber()));
+        }
+
+        accountEntity.setAccountBalance(accountEntity.getAccountBalance().subtract(transactionAmount));
+        accountService.saveAccountEntity(accountEntity);
+        TransactionEntity transactionEntity = TransactionEntity.builder()
+                .transactionUuid(this.generateTransactionUuid())
+                .transactionType(TransactionType.PAYMENT)
+                .oppositeAccountNumber(oppositeAccountNumber)
+                .transactionAmount(transactionAmount)
+                .transactionTimestamp(LocalDateTime.now())
+                .transactionStatus(TransactionStatus.SUCCESSFUL)
+                .account(accountEntity)
+                .build();
+        transactionRepo.save(transactionEntity);
+
+        oppositeAccountEntity.setAccountBalance(oppositeAccountEntity.getAccountBalance().add(transactionAmount));
+        accountService.saveAccountEntity(oppositeAccountEntity);
+        TransactionEntity oppositeTransactionEntity = TransactionEntity.builder()
+                .transactionUuid(this.generateTransactionUuid())
+                .transactionType(TransactionType.PAYMENT)
+                .oppositeAccountNumber(accountEntity.getAccountNumber())
+                .transactionAmount(transactionAmount)
+                .transactionTimestamp(LocalDateTime.now())
+                .transactionStatus(TransactionStatus.SUCCESSFUL)
+                .account(oppositeAccountEntity)
+                .build();
+        transactionRepo.save(oppositeTransactionEntity);
+    }
 }
