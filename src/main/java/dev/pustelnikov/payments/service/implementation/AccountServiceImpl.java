@@ -92,4 +92,10 @@ public class AccountServiceImpl implements AccountService {
     public boolean isAccountCurrencyValid(AccountEntity accountEntity, AccountCurrency oppositeAccountCurrency) {
         return accountEntity.getAccountCurrency() == oppositeAccountCurrency;
     }
+
+    @Override
+    public AccountDto getAccountInfo(Long accountId) {
+        AccountEntity accountEntity = this.findAccountById(accountId);
+        return accountMapper.mapToDto(accountEntity);
+    }
 }

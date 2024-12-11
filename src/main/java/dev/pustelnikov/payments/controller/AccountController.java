@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -29,5 +30,11 @@ public class AccountController {
     public String registerAccount(AccountRegistrationRequestDto accountRegistrationRequestDto) {
         accountService.registerAccount(accountRegistrationRequestDto);
         return "redirect:/accounts/main";
+    }
+
+    @GetMapping("{accountId:\\d+}")
+    public String getAccount(@PathVariable Long accountId, Model model) {
+        model.addAttribute("account", accountService.getAccountInfo(accountId));
+        return "template/account";
     }
 }

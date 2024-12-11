@@ -16,4 +16,5 @@ public interface AccountService {
     boolean isAccountBalanceValid(AccountEntity accountEntity, BigDecimal transactionAmount);
     AccountEntity findAccountByNumber(String accountNumber);
     boolean isAccountCurrencyValid(AccountEntity accountEntity, AccountCurrency oppositeAccountCurrency);
+    AccountDto getAccountInfo(Long accountId);
 }

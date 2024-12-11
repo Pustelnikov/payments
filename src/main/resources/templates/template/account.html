@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://nz.net.ultraq.thymeleaf"
+      layout:decorate="~{/layout/layout}">
+<head>
+    <title>Account</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <h1>Account</h1>
+    <table class="table align-middle">
+        <thead>
+        <tr>
+            <th>Number</th>
+            <th>Currency</th>
+            <th>Balance</th>
+            <th>Status</th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td th:text="${account.accountNumber}"></td>
+            <td th:text="${account.accountCurrency}"></td>
+            <td th:text="${account.accountBalance}"></td>
+            <td th:text="${account.accountStatus}"></td>
+            <td>
+                <form th:if="${account.getAccountStatus() == T(dev.pustelnikov.payments.model.AccountStatus).ACTIVE}"
+                      method="post" th:action="@{/accounts/lock}">
+                    <input type="hidden" name="accountId" th:value="${account.accountId}"/>
+                    <button type="submit" class="btn btn-primary">Lock</button>
+                </form>
+            </td>
+            <td>
+                <form sec:authorize="hasRole('ROLE_ADMIN')" method="post" th:action="@{/accounts/unlock}">
+                    <input type="hidden" name="accountId" th:value="${account.accountId}"/>
+                    <button type="submit" class="btn btn-primary">Unlock</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <h2 class="mt-5">Transactions</h2>
+    <table th:if="!${account.accountTransactions.isEmpty()}" class="table align-middle">
+        <thead>
+        <tr>
+            <th>UUID</th>
+            <th>Type</th>
+            <th>Opposite</th>
+            <th>Amount</th>
+            <th>Date</th>
+            <th>Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="transaction : ${account.accountTransactions}">
+            <td th:text="${transaction.transactionUuid}"></td>
+            <td th:text="${transaction.transactionType}"></td>
+            <td th:text="${transaction.oppositeAccountNumber}"></td>
+            <td th:text="${transaction.transactionAmount}"></td>
+            <td th:text="${transaction.transactionTimestamp}"></td>
+            <td th:text="${transaction.transactionStatus}"></td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+</body>
+</html>
