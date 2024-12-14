@@ -1,6 +1,7 @@
 package dev.pustelnikov.payments.controller;
 
 import dev.pustelnikov.payments.dto.account.AccountRegistrationRequestDto;
+import dev.pustelnikov.payments.model.UserRole;
 import dev.pustelnikov.payments.service.AccountService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import java.util.Objects;
 
 @Controller
 @RequiredArgsConstructor
@@ -28,7 +30,11 @@ public class AccountController {
     }
 
     @PostMapping("register")
-    public String registerAccount(AccountRegistrationRequestDto accountRegistrationRequestDto) {
+    public String registerAccount(AccountRegistrationRequestDto accountRegistrationRequestDto, HttpServletRequest httpServletRequest) {
+        if (!(Objects.equals(httpServletRequest.getUserPrincipal().getName(), accountRegistrationRequestDto.getUserName())
+                || httpServletRequest.isUserInRole(UserRole.ROLE_ADMIN.name()))) {
+            return "redirect:/users/main";
+        }
         accountService.registerAccount(accountRegistrationRequestDto);
         return "redirect:/accounts/main";
     }
