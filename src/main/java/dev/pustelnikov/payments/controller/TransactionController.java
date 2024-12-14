@@ -47,7 +47,10 @@ public class TransactionController {
     }
 
     @PostMapping("withdraw")
-    public String doWithdraw(WithdrawTransactionRequestDto withdrawTransactionRequestDto) {
+    public String doWithdraw(@Valid WithdrawTransactionRequestDto withdrawTransactionRequestDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "template/withdraw";
+        }
         transactionService.doWithdrawTransaction(withdrawTransactionRequestDto);
         return "redirect:/accounts/main";
     }
