@@ -11,24 +11,48 @@
     <div class="row">
         <div class="col-md-3 mt-3 ms-3">
             <h1 class="mb-3 text-center">Deposit</h1>
-            <form method="post" th:action="@{/transactions/deposit}">
-                <div class="mb-3">
-                    <label for="accountId" class="form-label">Account</label>
-                    <select id="accountId" name="accountId" class="form-select" required>
-                        <option value="" selected>Please choose...</option>
-                        <option th:each="account : ${userAccounts}" th:value="${account.accountId}"
-                                th:text="${account.accountNumber}"></option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label for="transactionAmount" class="form-label">Amount</label>
-                    <input type="number" min="0" step="0.01" class="form-control"
-                           id="transactionAmount" name="transactionAmount" required>
-                </div>
-                <div class="d-grid mt-4">
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </div>
-            </form>
+            <th:block th:if="${depositTransactionRequestDto == null}">
+                <form method="post" th:action="@{/transactions/deposit}">
+                    <div class="mb-3">
+                        <label for="accountId" class="form-label">Account</label>
+                        <select id="accountId" name="accountId" class="form-select" required>
+                            <option value="" selected>Please choose...</option>
+                            <option th:each="account : ${userAccounts}" th:value="${account.accountId}"
+                                    th:text="${account.accountNumber}"></option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="transactionAmount" class="form-label">Amount</label>
+                        <input type="number" min="0" step="0.01" class="form-control"
+                               id="transactionAmount" name="transactionAmount" required>
+                    </div>
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </th:block>
+            <th:block th:if="${depositTransactionRequestDto != null}">
+                <form method="post" th:action="@{/transactions/deposit}" th:object="${depositTransactionRequestDto}">
+                    <div class="mb-3">
+                        <label for="accountId" class="form-label">Account</label>
+                        <select id="accountId" name="accountId" class="form-select" th:field="*{accountId}" required>
+                            <option value="" selected>Please choose...</option>
+                            <option th:each="account : ${userAccounts}" th:value="${account.accountId}"
+                                    th:text="${account.accountNumber}"></option>
+                        </select>
+                        <span class="text-danger" th:if="${#fields.hasErrors('accountId')}" th:errors="*{accountId}"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="transactionAmount" class="form-label">Amount</label>
+                        <input type="number" min="0" step="0.01" class="form-control"
+                               id="transactionAmount" name="transactionAmount" th:field="*{transactionAmount}" required>
+                        <span class="text-danger" th:if="${#fields.hasErrors('transactionAmount')}" th:errors="*{transactionAmount}"></span>
+                    </div>
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </th:block>
         </div>
     </div>
 </section>

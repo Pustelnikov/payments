@@ -7,10 +7,12 @@ import dev.pustelnikov.payments.dto.transaction.WithdrawTransactionRequestDto;
 import dev.pustelnikov.payments.service.AccountService;
 import dev.pustelnikov.payments.service.TransactionService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +32,10 @@ public class TransactionController {
     }
 
     @PostMapping("deposit")
-    public String doDeposit(DepositTransactionRequestDto depositTransactionRequestDto) {
+    public String doDeposit(@Valid DepositTransactionRequestDto depositTransactionRequestDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "template/deposit";
+        }
         transactionService.doDepositTransaction(depositTransactionRequestDto);
         return "redirect:/accounts/main";
     }
