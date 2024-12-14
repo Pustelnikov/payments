@@ -33,7 +33,7 @@ public class AccountController {
     public String registerAccount(AccountRegistrationRequestDto accountRegistrationRequestDto, HttpServletRequest httpServletRequest) {
         if (!(Objects.equals(httpServletRequest.getUserPrincipal().getName(), accountRegistrationRequestDto.getUserName())
                 || httpServletRequest.isUserInRole(UserRole.ROLE_ADMIN.name()))) {
-            return "redirect:/users/main";
+            return "redirect:/accounts/main";
         }
         accountService.registerAccount(accountRegistrationRequestDto);
         return "redirect:/accounts/main";
