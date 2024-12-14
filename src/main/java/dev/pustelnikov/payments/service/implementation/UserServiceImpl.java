@@ -1,8 +1,10 @@
 package dev.pustelnikov.payments.service.implementation;
 
+import dev.pustelnikov.payments.dto.user.UserDto;
 import dev.pustelnikov.payments.dto.user.UserRegistrationRequestDto;
 import dev.pustelnikov.payments.exception.user.UserAlreadyExistsException;
 import dev.pustelnikov.payments.exception.user.UserNotFoundException;
+import dev.pustelnikov.payments.mapper.UserMapper;
 import dev.pustelnikov.payments.model.UserRole;
 import dev.pustelnikov.payments.model.entity.UserEntity;
 import dev.pustelnikov.payments.repository.UserRepo;
@@ -11,6 +13,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -18,6 +21,7 @@ import java.util.Set;
 public class UserServiceImpl implements UserService {
 
     private final UserRepo userRepo;
+    private final UserMapper userMapper;
     private final PasswordEncoder bCryptPasswordEncoder;
 
     @Override
@@ -39,5 +43,10 @@ public class UserServiceImpl implements UserService {
     public UserEntity findUserByUserName(String userName) throws UserNotFoundException {
         return userRepo.findByUserName(userName)
                 .orElseThrow(() -> new UserNotFoundException("User with username %s not found".formatted(userName)));
+    }
+
+    @Override
+    public List<UserDto> getAllUsers() {
+        return userMapper.mapToDto(userRepo.findAll());
     }
 }

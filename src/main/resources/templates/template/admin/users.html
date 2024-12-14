@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://nz.net.ultraq.thymeleaf"
+      layout:decorate="~{/layout/layout}">
+<head>
+    <title>Users</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <h1>Users</h1>
+    <table th:if="!${users.isEmpty()}" class="table align-middle">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Username</th>
+            <th>Roles</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.userId}"></td>
+            <td th:text="${user.userName}"></td>
+            <td>
+                <span th:each="role, iteration  : ${user.userRoles}" th:text="${role.name()} + ${!iteration.last ? ', ' : ''}"></span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+</body>
+</html>
