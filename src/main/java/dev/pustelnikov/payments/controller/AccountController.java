@@ -57,7 +57,11 @@ public class AccountController {
     }
 
     @PostMapping("lock")
-    public String lockAccount(Long accountId) {
+    public String lockAccount(Long accountId, HttpServletRequest httpServletRequest) {
+        if (!(accountService.isAccountBelongsToUser(accountId, httpServletRequest.getUserPrincipal().getName())
+                || httpServletRequest.isUserInRole(UserRole.ROLE_ADMIN.name()))) {
+            return "redirect:/accounts/main";
+        }
         accountService.lockAccount(accountId);
         return "redirect:/accounts/%d".formatted(accountId);
     }
