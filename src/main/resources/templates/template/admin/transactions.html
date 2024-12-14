@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://nz.net.ultraq.thymeleaf"
+      layout:decorate="~{/layout/layout}">
+<head>
+    <title>Transactions</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <h1>Transactions</h1>
+    <table th:if="!${transactions.isEmpty()}" class="table align-middle">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>UUID</th>
+            <th>Type</th>
+            <th>Opposite</th>
+            <th>Amount</th>
+            <th>Timestamp</th>
+            <th>Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="transaction : ${transactions}">
+            <td th:text="${transaction.transactionId}"></td>
+            <td th:text="${transaction.transactionUuid}"></td>
+            <td th:text="${transaction.transactionType}"></td>
+            <td th:text="${transaction.oppositeAccountNumber}"></td>
+            <td th:text="${transaction.transactionAmount}"></td>
+            <td th:text="${transaction.transactionTimestamp}"></td>
+            <td th:text="${transaction.transactionStatus}"></td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+</body>
+</html>

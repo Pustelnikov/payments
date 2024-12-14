@@ -4,6 +4,7 @@ import dev.pustelnikov.payments.dto.transaction.*;
 import dev.pustelnikov.payments.exception.account.AccountCurrencyMismatchException;
 import dev.pustelnikov.payments.exception.account.AccountInsufficientFundsException;
 import dev.pustelnikov.payments.exception.account.AccountLockedException;
+import dev.pustelnikov.payments.mapper.TransactionMapper;
 import dev.pustelnikov.payments.model.TransactionStatus;
 import dev.pustelnikov.payments.model.TransactionType;
 import dev.pustelnikov.payments.model.entity.AccountEntity;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -24,6 +26,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     private final TransactionRepo transactionRepo;
     private final AccountService accountService;
+    private final TransactionMapper transactionMapper;
 
     private String generateTransactionUuid() {
         return UUID.randomUUID().toString();
@@ -183,5 +186,10 @@ public class TransactionServiceImpl implements TransactionService {
                 .account(oppositeAccountEntity)
                 .build();
         transactionRepo.save(oppositeTransactionEntity);
+    }
+
+    @Override
+    public List<TransactionDto> getAllTransactions() {
+        return transactionMapper.mapToDto(transactionRepo.findAll());
     }
 }

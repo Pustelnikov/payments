@@ -8,6 +8,7 @@ import dev.pustelnikov.payments.service.AccountService;
 import dev.pustelnikov.payments.service.TransactionService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -68,5 +69,12 @@ public class TransactionController {
     public String doPayment(PaymentTransactionRequestDto paymentTransactionRequestDto) {
         transactionService.doPaymentTransaction(paymentTransactionRequestDto);
         return "redirect:/accounts/main";
+    }
+
+    @GetMapping("all")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String getAllTransactions(Model model) {
+        model.addAttribute("transactions", transactionService.getAllTransactions());
+        return "template/admin/transactions";
     }
 }
