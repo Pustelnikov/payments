@@ -28,19 +28,38 @@
                                     <a class="nav-link active" aria-current="true" th:href="@{/users/register}">Sign Up</a>
                                 </li>
                             </ul>
-                            <form method="post" th:action="@{/users/register}">
-                                <div class="form-outline mb-3">
-                                    <label for="userName" class="form-label">Username</label>
-                                    <input type="text" name="userName" id="userName" class="form-control" required>
-                                </div>
-                                <div class="form-outline mb-3">
-                                    <label for="userPassword" class="form-label">Password</label>
-                                    <input type="password" name="userPassword" id="userPassword" class="form-control" required>
-                                </div>
-                                <div class="d-grid mt-4">
-                                    <button type="submit" class="btn btn-primary">Sign Up</button>
-                                </div>
-                            </form>
+                            <th:block th:if="${userRegistrationRequestDto == null}">
+                                <form method="post" th:action="@{/users/register}">
+                                    <div class="form-outline mb-3">
+                                        <label for="userName" class="form-label">Username</label>
+                                        <input type="text" name="userName" id="userName" class="form-control" required>
+                                    </div>
+                                    <div class="form-outline mb-3">
+                                        <label for="userPassword" class="form-label">Password</label>
+                                        <input type="password" name="userPassword" id="userPassword" class="form-control" required>
+                                    </div>
+                                    <div class="d-grid mt-4">
+                                        <button type="submit" class="btn btn-primary">Sign Up</button>
+                                    </div>
+                                </form>
+                            </th:block>
+                            <th:block th:if="${userRegistrationRequestDto != null}">
+                                <form method="post" th:action="@{/users/register}" th:object="${userRegistrationRequestDto}">
+                                    <div class="form-outline mb-3">
+                                        <label for="userName" class="form-label">Username</label>
+                                        <input type="text" name="userName" id="userName" class="form-control" th:field="*{userName}" required>
+                                        <span class="text-danger" th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}"></span>
+                                    </div>
+                                    <div class="form-outline mb-3">
+                                        <label for="userPassword" class="form-label">Password</label>
+                                        <input type="password" name="userPassword" id="userPassword" class="form-control" th:field="*{userPassword}" required>
+                                        <span class="text-danger" th:if="${#fields.hasErrors('userPassword')}" th:errors="*{userPassword}"></span>
+                                    </div>
+                                    <div class="d-grid mt-4">
+                                        <button type="submit" class="btn btn-primary">Sign Up</button>
+                                    </div>
+                                </form>
+                            </th:block>
                         </div>
                     </div>
                 </div>
