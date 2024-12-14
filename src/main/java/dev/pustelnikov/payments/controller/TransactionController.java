@@ -77,7 +77,10 @@ public class TransactionController {
     }
 
     @PostMapping("payment")
-    public String doPayment(PaymentTransactionRequestDto paymentTransactionRequestDto) {
+    public String doPayment(@Valid PaymentTransactionRequestDto paymentTransactionRequestDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "template/payment";
+        }
         transactionService.doPaymentTransaction(paymentTransactionRequestDto);
         return "redirect:/accounts/main";
     }
