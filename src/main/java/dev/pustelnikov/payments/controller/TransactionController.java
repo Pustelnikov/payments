@@ -62,7 +62,10 @@ public class TransactionController {
     }
 
     @PostMapping("transfer")
-    public String doTransfer(TransferTransactionRequestDto transferTransactionRequestDto) {
+    public String doTransfer(@Valid TransferTransactionRequestDto transferTransactionRequestDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "template/transfer";
+        }
         transactionService.doTransferTransaction(transferTransactionRequestDto);
         return "redirect:/accounts/main";
     }
