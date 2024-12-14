@@ -19,4 +19,5 @@ public interface AccountService {
     AccountDto getAccountInfo(Long accountId);
     List<AccountDto> getAllAccounts();
     void lockAccount(Long accountId);
+    void unlockAccount(Long accountId);
 }

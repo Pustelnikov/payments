@@ -51,4 +51,11 @@ public class AccountController {
         accountService.lockAccount(accountId);
         return "redirect:/accounts/%d".formatted(accountId);
     }
+
+    @PostMapping("unlock")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String unlockAccount(Long accountId) {
+        accountService.unlockAccount(accountId);
+        return "redirect:/accounts/%d".formatted(accountId);
+    }
 }

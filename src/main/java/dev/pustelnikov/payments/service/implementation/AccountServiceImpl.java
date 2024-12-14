@@ -113,4 +113,14 @@ public class AccountServiceImpl implements AccountService {
             accountRepo.save(accountEntity);
         }
     }
+
+    @Override
+    @Transactional
+    public void unlockAccount(Long accountId) {
+        AccountEntity accountEntity = this.findAccountById(accountId);
+        if (accountEntity.getAccountStatus() == AccountStatus.LOCKED) {
+            accountEntity.setAccountStatus(AccountStatus.ACTIVE);
+            accountRepo.save(accountEntity);
+        }
+    }
 }
