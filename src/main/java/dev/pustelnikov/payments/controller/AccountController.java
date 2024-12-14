@@ -4,6 +4,7 @@ import dev.pustelnikov.payments.dto.account.AccountRegistrationRequestDto;
 import dev.pustelnikov.payments.service.AccountService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,5 +37,12 @@ public class AccountController {
     public String getAccount(@PathVariable Long accountId, Model model) {
         model.addAttribute("account", accountService.getAccountInfo(accountId));
         return "template/account";
+    }
+
+    @GetMapping("all")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String getAllAccounts(Model model) {
+        model.addAttribute("accounts", accountService.getAllAccounts());
+        return "template/admin/accounts";
     }
 }

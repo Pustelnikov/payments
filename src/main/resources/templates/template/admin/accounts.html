@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://nz.net.ultraq.thymeleaf"
+      layout:decorate="~{/layout/layout}">
+<head>
+    <title>Accounts</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <h1>Accounts</h1>
+    <table th:if="!${accounts.isEmpty()}" class="table align-middle">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Number</th>
+            <th>Currency</th>
+            <th>Balance</th>
+            <th>Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="account : ${accounts}">
+            <td th:text="${account.accountId}"></td>
+            <td><a th:href="@{/accounts/{accountId}(accountId=${account.accountId})}"
+                   th:text="${account.accountNumber}"></a></td>
+            <td th:text="${account.accountCurrency}"></td>
+            <td th:text="${account.accountBalance}"></td>
+            <td th:text="${account.accountStatus}"></td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+</body>
+</html>
