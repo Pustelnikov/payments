@@ -103,4 +103,14 @@ public class AccountServiceImpl implements AccountService {
     public List<AccountDto> getAllAccounts() {
         return accountMapper.mapToDto(accountRepo.findAll());
     }
+
+    @Override
+    @Transactional
+    public void lockAccount(Long accountId) {
+        AccountEntity accountEntity = this.findAccountById(accountId);
+        if (accountEntity.getAccountStatus() == AccountStatus.ACTIVE) {
+            accountEntity.setAccountStatus(AccountStatus.LOCKED);
+            accountRepo.save(accountEntity);
+        }
+    }
 }

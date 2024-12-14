@@ -18,4 +18,5 @@ public interface AccountService {
     boolean isAccountCurrencyValid(AccountEntity accountEntity, AccountCurrency oppositeAccountCurrency);
     AccountDto getAccountInfo(Long accountId);
     List<AccountDto> getAllAccounts();
+    void lockAccount(Long accountId);
 }

@@ -45,4 +45,10 @@ public class AccountController {
         model.addAttribute("accounts", accountService.getAllAccounts());
         return "template/admin/accounts";
     }
+
+    @PostMapping("lock")
+    public String lockAccount(Long accountId) {
+        accountService.lockAccount(accountId);
+        return "redirect:/accounts/%d".formatted(accountId);
+    }
 }
