@@ -20,4 +20,5 @@ public interface AccountService {
     List<AccountDto> getAllAccounts();
     void lockAccount(Long accountId);
     void unlockAccount(Long accountId);
+    boolean isAccountBelongsToUser(Long accountId, String userName);
 }

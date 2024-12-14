@@ -123,4 +123,10 @@ public class AccountServiceImpl implements AccountService {
             accountRepo.save(accountEntity);
         }
     }
+
+    @Override
+    public boolean isAccountBelongsToUser(Long accountId, String userName) {
+        return userService.findUserByUserName(userName).getUserAccounts()
+                .stream().map(AccountEntity::getAccountId).toList().contains(accountId);
+    }
 }

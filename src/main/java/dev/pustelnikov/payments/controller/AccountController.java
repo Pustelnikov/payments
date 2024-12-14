@@ -40,7 +40,11 @@ public class AccountController {
     }
 
     @GetMapping("{accountId:\\d+}")
-    public String getAccount(@PathVariable Long accountId, Model model) {
+    public String getAccount(@PathVariable Long accountId, HttpServletRequest httpServletRequest, Model model) {
+        if (!(accountService.isAccountBelongsToUser(accountId, httpServletRequest.getUserPrincipal().getName())
+                || httpServletRequest.isUserInRole(UserRole.ROLE_ADMIN.name()))) {
+            return "redirect:/accounts/main";
+        }
         model.addAttribute("account", accountService.getAccountInfo(accountId));
         return "template/account";
     }
