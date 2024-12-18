@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Sorting</title>
+</head>
+<body>
+<th th:fragment="sorting(field, label)">
+    <a th:href="@{'/{url}?' + ${searchKeyword != null ? 'searchKeyword=' + searchKeyword + '&' : ''}
+                    + 'pageNumber=' + ${currentPage} + '&pageSize=' + ${pageSize}
+                    + '&sortField=' + ${field} +  '&sortDirection=' + ${sortField == field ? reverseSortDirection : sortDirection}(url=${path})}">
+        [[${label}]] </a>
+</th>
+</body>
+</html>

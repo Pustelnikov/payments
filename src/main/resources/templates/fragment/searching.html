@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Searching</title>
+</head>
+<body>
+<form th:fragment="searching" th:action="@{/{url}(url=${path})}" method="get">
+    <input type="hidden" name="pageNumber" th:value="${pageNumber}">
+    <input type="hidden" name="pageSize" th:value="${pageSize}">
+    <input type="hidden" name="sortField" th:value="${sortField}">
+    <input type="hidden" name="sortDirection" th:value="${sortDirection}">
+    <table>
+        <tr>
+            <td>
+                <input type="search" name="searchKeyword" class="form-control" placeholder="Enter keyword"
+                       th:value="${searchKeyword}" required>
+            </td>
+            <td>
+                <button type="submit" class="btn btn-primary">Search</button>
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

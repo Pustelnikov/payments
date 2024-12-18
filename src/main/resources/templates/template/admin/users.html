@@ -9,11 +9,12 @@
 <body>
 <section layout:fragment="content">
     <h1>Users</h1>
+    <form th:replace="~{/fragment/searching :: searching}"></form>
     <table th:if="!${users.isEmpty()}" class="table align-middle">
         <thead>
         <tr>
-            <th>Id</th>
-            <th>Username</th>
+            <th th:replace="~{/fragment/sorting :: sorting('userId','Id')}">Id</th>
+            <th th:replace="~{/fragment/sorting :: sorting('userName','Username')}">Username</th>
             <th>Roles</th>
         </tr>
         </thead>
@@ -27,6 +28,7 @@
         </tr>
         </tbody>
     </table>
+    <nav th:replace="~{/fragment/paging :: paging}"></nav>
 </section>
 </body>
 </html>

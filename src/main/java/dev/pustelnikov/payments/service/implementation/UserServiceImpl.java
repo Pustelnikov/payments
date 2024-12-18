@@ -11,9 +11,12 @@ import dev.pustelnikov.payments.repository.UserRepo;
 import dev.pustelnikov.payments.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import java.util.List;
 import java.util.Set;
 
 @Service
@@ -46,7 +49,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> getAllUsers() {
-        return userMapper.mapToDto(userRepo.findAll());
+    public Page<UserDto> getAllUsers(String searchKeyword, Integer pageNumber, Integer pageSize, String sortField, String sortDirection) {
+        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+        if (searchKeyword == null) {
+            return userRepo.findAll(pageable).map(userMapper::mapToDto);
+        } else {
+            return userRepo.search(searchKeyword, pageable).map(userMapper::mapToDto);
+        }
     }
 }
