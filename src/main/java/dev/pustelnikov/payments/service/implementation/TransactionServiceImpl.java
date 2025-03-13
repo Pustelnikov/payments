@@ -10,6 +10,7 @@ import dev.pustelnikov.payments.model.TransactionType;
 import dev.pustelnikov.payments.model.entity.AccountEntity;
 import dev.pustelnikov.payments.model.entity.TransactionEntity;
 import dev.pustelnikov.payments.repository.TransactionRepo;
+import dev.pustelnikov.payments.service.AccountCheckService;
 import dev.pustelnikov.payments.service.AccountService;
 import dev.pustelnikov.payments.service.TransactionService;
 import jakarta.transaction.Transactional;
@@ -26,6 +27,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     private final TransactionRepo transactionRepo;
     private final AccountService accountService;
+    private final AccountCheckService accountCheckService;
     private final TransactionMapper transactionMapper;
 
     private String generateTransactionUuid() {
@@ -39,7 +41,7 @@ public class TransactionServiceImpl implements TransactionService {
         BigDecimal transactionAmount = depositTransactionRequestDto.getTransactionAmount();
         AccountEntity accountEntity = accountService.findAccountById(accountEntityId);
 
-        if (!accountService.isAccountActive(accountEntity)) {
+        if (!accountCheckService.isAccountActive(accountEntity)) {
             throw new AccountLockedException("Account %s is not active".formatted(accountEntity.getAccountNumber()));
         }
 
@@ -65,10 +67,10 @@ public class TransactionServiceImpl implements TransactionService {
         BigDecimal transactionAmount = withdrawTransactionRequestDto.getTransactionAmount();
         AccountEntity accountEntity = accountService.findAccountById(accountEntityId);
 
-        if (!accountService.isAccountActive(accountEntity)) {
+        if (!accountCheckService.isAccountActive(accountEntity)) {
             throw new AccountLockedException("Account %s is not active".formatted(accountEntity.getAccountNumber()));
         }
-        if (!accountService.isAccountBalanceValid(accountEntity, transactionAmount)) {
+        if (!accountCheckService.isAccountBalanceValid(accountEntity, transactionAmount)) {
             throw new AccountInsufficientFundsException("Account number %s has insufficient funds".formatted(accountEntity.getAccountNumber()));
         }
 
@@ -96,16 +98,16 @@ public class TransactionServiceImpl implements TransactionService {
         AccountEntity accountEntity = accountService.findAccountById(accountEntityId);
         AccountEntity oppositeAccountEntity = accountService.findAccountByNumber(oppositeAccountNumber);
 
-        if (!accountService.isAccountActive(accountEntity)) {
+        if (!accountCheckService.isAccountActive(accountEntity)) {
             throw new AccountLockedException("Account number %s is not active".formatted(accountEntity.getAccountNumber()));
         }
-        if (!accountService.isAccountActive(oppositeAccountEntity)) {
+        if (!accountCheckService.isAccountActive(oppositeAccountEntity)) {
             throw new AccountLockedException("Account number %s is not active".formatted(oppositeAccountEntity.getAccountNumber()));
         }
-        if (!accountService.isAccountBalanceValid(accountEntity, transactionAmount)) {
+        if (!accountCheckService.isAccountBalanceValid(accountEntity, transactionAmount)) {
             throw new AccountInsufficientFundsException("Account number %s has insufficient funds".formatted(accountEntity.getAccountNumber()));
         }
-        if (!accountService.isAccountCurrencyValid(accountEntity, oppositeAccountEntity.getAccountCurrency())) {
+        if (!accountCheckService.isAccountCurrencyValid(accountEntity, oppositeAccountEntity.getAccountCurrency())) {
             throw new AccountCurrencyMismatchException("Accounts %s and %s has different currency type"
                     .formatted(accountEntity.getAccountNumber(), oppositeAccountEntity.getAccountNumber()));
         }
@@ -147,16 +149,16 @@ public class TransactionServiceImpl implements TransactionService {
         AccountEntity accountEntity = accountService.findAccountById(accountEntityId);
         AccountEntity oppositeAccountEntity = accountService.findAccountByNumber(oppositeAccountNumber);
 
-        if (!accountService.isAccountActive(accountEntity)) {
+        if (!accountCheckService.isAccountActive(accountEntity)) {
             throw new AccountLockedException("Account number %s is not active".formatted(accountEntity.getAccountNumber()));
         }
-        if (!accountService.isAccountActive(oppositeAccountEntity)) {
+        if (!accountCheckService.isAccountActive(oppositeAccountEntity)) {
             throw new AccountLockedException("Account number %s is not active".formatted(oppositeAccountEntity.getAccountNumber()));
         }
-        if (!accountService.isAccountBalanceValid(accountEntity, transactionAmount)) {
+        if (!accountCheckService.isAccountBalanceValid(accountEntity, transactionAmount)) {
             throw new AccountInsufficientFundsException("Account number %s has insufficient funds".formatted(accountEntity.getAccountNumber()));
         }
-        if (!accountService.isAccountCurrencyValid(accountEntity, oppositeAccountEntity.getAccountCurrency())) {
+        if (!accountCheckService.isAccountCurrencyValid(accountEntity, oppositeAccountEntity.getAccountCurrency())) {
             throw new AccountCurrencyMismatchException("Accounts %s and %s has different currency type"
                     .formatted(accountEntity.getAccountNumber(), oppositeAccountEntity.getAccountNumber()));
         }

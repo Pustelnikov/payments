@@ -4,7 +4,6 @@ import dev.pustelnikov.payments.dto.account.AccountDto;
 import dev.pustelnikov.payments.dto.account.AccountRegistrationRequestDto;
 import dev.pustelnikov.payments.exception.account.AccountNotFoundException;
 import dev.pustelnikov.payments.mapper.AccountMapper;
-import dev.pustelnikov.payments.model.AccountCurrency;
 import dev.pustelnikov.payments.model.AccountStatus;
 import dev.pustelnikov.payments.model.entity.AccountEntity;
 import dev.pustelnikov.payments.model.entity.UserEntity;
@@ -66,31 +65,15 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public boolean isAccountActive(AccountEntity accountEntity) {
-        return accountEntity.getAccountStatus() == AccountStatus.ACTIVE;
-    }
-
-    @Override
     @Transactional
     public void saveAccountEntity(AccountEntity accountEntity) {
         accountRepo.save(accountEntity);
     }
 
     @Override
-    public boolean isAccountBalanceValid(AccountEntity accountEntity, BigDecimal transactionAmount) {
-        BigDecimal accountEntityBalance = accountEntity.getAccountBalance();
-        return accountEntityBalance.compareTo(transactionAmount) >= 0;
-    }
-
-    @Override
     public AccountEntity findAccountByNumber(String accountNumber) throws AccountNotFoundException {
         return accountRepo.findByAccountNumber(accountNumber)
                 .orElseThrow(() -> new AccountNotFoundException("Account with number %s not found".formatted(accountNumber)));
-    }
-
-    @Override
-    public boolean isAccountCurrencyValid(AccountEntity accountEntity, AccountCurrency oppositeAccountCurrency) {
-        return accountEntity.getAccountCurrency() == oppositeAccountCurrency;
     }
 
     @Override
@@ -122,11 +105,5 @@ public class AccountServiceImpl implements AccountService {
             accountEntity.setAccountStatus(AccountStatus.ACTIVE);
             accountRepo.save(accountEntity);
         }
-    }
-
-    @Override
-    public boolean isAccountBelongsToUser(Long accountId, String userName) {
-        return userService.findUserByUserName(userName).getUserAccounts()
-                .stream().map(AccountEntity::getAccountId).toList().contains(accountId);
     }
 }

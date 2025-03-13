@@ -2,6 +2,7 @@ package dev.pustelnikov.payments.controller;
 
 import dev.pustelnikov.payments.dto.account.AccountRegistrationRequestDto;
 import dev.pustelnikov.payments.model.UserRole;
+import dev.pustelnikov.payments.service.AccountCheckService;
 import dev.pustelnikov.payments.service.AccountService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import java.util.Objects;
 public class AccountController {
 
     private final AccountService accountService;
+    private final AccountCheckService accountCheckService;
 
     @GetMapping("main")
     public String getMainPage(HttpServletRequest httpServletRequest, Model model) {
@@ -41,7 +43,7 @@ public class AccountController {
 
     @GetMapping("{accountId:\\d+}")
     public String getAccount(@PathVariable Long accountId, HttpServletRequest httpServletRequest, Model model) {
-        if (!(accountService.isAccountBelongsToUser(accountId, httpServletRequest.getUserPrincipal().getName())
+        if (!(accountCheckService.isAccountBelongsToUser(accountId, httpServletRequest.getUserPrincipal().getName())
                 || httpServletRequest.isUserInRole(UserRole.ROLE_ADMIN.name()))) {
             return "redirect:/accounts/main";
         }
@@ -58,7 +60,7 @@ public class AccountController {
 
     @PostMapping("lock")
     public String lockAccount(Long accountId, HttpServletRequest httpServletRequest) {
-        if (!(accountService.isAccountBelongsToUser(accountId, httpServletRequest.getUserPrincipal().getName())
+        if (!(accountCheckService.isAccountBelongsToUser(accountId, httpServletRequest.getUserPrincipal().getName())
                 || httpServletRequest.isUserInRole(UserRole.ROLE_ADMIN.name()))) {
             return "redirect:/accounts/main";
         }
